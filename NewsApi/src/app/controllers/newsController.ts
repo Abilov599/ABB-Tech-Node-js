@@ -1,11 +1,6 @@
-// controllers/newsController.ts
 import { Request, Response } from 'express';
-import { getNewsArticle, NewsArticle } from '../models/newsModel';
-import { renderNews } from '../views/newsView';
-
-// In a real application, you would have an array of news articles
-// For this example, we'll have a single article.
-const articles: NewsArticle[] = [getNewsArticle()];
+import newsData from '../../data/newsData.json'; // Load news data
+import { NewsArticle } from '../models/newsModel';
 
 export const getNews = (req: Request, res: Response): void => {
   try {
@@ -21,12 +16,9 @@ export const getNews = (req: Request, res: Response): void => {
     // Calculate the start and end indices for pagination
     const startIndex = (parsedPage - 1) * parsedSize;
     const endIndex = parsedPage * parsedSize;
+    const articlesForPage: NewsArticle[] = newsData.slice(startIndex, endIndex);
 
-    // Get articles for the current page
-    const articlesForPage = articles.slice(startIndex, endIndex);
-
-    // Return the paginated articles
-    renderNews(res, articlesForPage);
+    res.json(articlesForPage);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });
