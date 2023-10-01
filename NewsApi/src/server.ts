@@ -1,4 +1,3 @@
-// server.ts
 import express, { Application } from 'express';
 import 'dotenv/config';
 import newsRouter from './routes/newsRouted';
